@@ -20,16 +20,16 @@ package com.github.se_bastiaan.torrentstreamer.sample
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.Button
+import android.widget.MediaController
 import android.widget.ProgressBar
+import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.viewbinding.BuildConfig
 import com.github.se_bastiaan.torrentstream.StreamStatus
 import com.github.se_bastiaan.torrentstream.Torrent
 import com.github.se_bastiaan.torrentstream.TorrentOptions
@@ -43,7 +43,14 @@ class MainActivity : AppCompatActivity(), TorrentListener {
     private lateinit var button: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var torrentStream: TorrentStream
-    private var streamUrl = "magnet:?xt=urn:btih:88594aaacbde40ef3e2510c47374ec0aa396c08e&dn=bbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&ws=http%3A%2F%2Fdistribution.bbb3d.renderfarming.net%2Fvideo%2Fmp4%2Fbbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4"
+    private lateinit var simpleVideoView: VideoView
+    private lateinit var mediaControls: MediaController
+
+
+
+    private var streamUrl =  "magnet:?xt=urn:btih:88594aaacbde40ef3e2510c47374ec0aa396c08e&dn=bbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&ws=http%3A%2F%2Fdistribution.bbb3d.renderfarming.net%2Fvideo%2Fmp4%2Fbbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4"
+    // "magnet:?xt=urn:btih:09A15869D417200F399DCAB89E6E9F494C7416EC&dn=SHADOWS%20HOUSE%20S02E11%20AAC%20MP4-Mobile&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce"
+    // "magnet:?xt=urn:btih:88594aaacbde40ef3e2510c47374ec0aa396c08e&dn=bbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&ws=http%3A%2F%2Fdistribution.bbb3d.renderfarming.net%2Fvideo%2Fmp4%2Fbbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4"
     var onClickListener = View.OnClickListener {
         progressBar.progress = 0
         if (torrentStream.isStreaming) {
@@ -55,9 +62,12 @@ class MainActivity : AppCompatActivity(), TorrentListener {
         button.text = "Stop stream"
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        simpleVideoView = findViewById(R.id.videoView)
         val action = intent.action
         val data = intent.data
         if (action != null && action == Intent.ACTION_VIEW && data != null) {
@@ -98,16 +108,24 @@ class MainActivity : AppCompatActivity(), TorrentListener {
         progressBar.progress = 100
         val mediaFile = torrent.videoFile
         Log.d(TORRENT, "onStreamReady: $mediaFile")
-
+        // jc 22
+        mediaControls = MediaController(this@MainActivity)
+        mediaControls.setAnchorView(simpleVideoView)
+        simpleVideoView.setMediaController(mediaControls)
+        val authority = "com.github.se_bastiaan.torrentstreamer.sample.provider"
+        simpleVideoView.setVideoURI(FileProvider.getUriForFile(this@MainActivity, authority, mediaFile))
+        simpleVideoView.start()
         // Create a sharing intent
+
         startActivity(Intent().apply {
             action = Intent.ACTION_VIEW
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(mediaFile.extension)
-            val authority = "com.github.se_bastiaan.torrentstreamer.sample.provider"
+            // moved auth up
             data = FileProvider.getUriForFile(this@MainActivity, authority, mediaFile)
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
                     Intent.FLAG_ACTIVITY_CLEAR_TOP
         })
+
     }
 
     override fun onStreamProgress(torrent: Torrent, status: StreamStatus) {
