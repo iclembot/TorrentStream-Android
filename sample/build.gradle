@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.github.se_bastiaan.torrentstreamer.sample"
@@ -52,7 +52,8 @@ android {
 
 dependencies {
     implementation project(':library')
-
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    // jsoup HTML parser library @ https://jsoup.org/ added jc 22
+    implementation 'org.jsoup:jsoup:1.15.3'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
 }

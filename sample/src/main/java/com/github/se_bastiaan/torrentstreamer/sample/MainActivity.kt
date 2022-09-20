@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), TorrentListener {
     private lateinit var torrentStream: TorrentStream
     private lateinit var simpleVideoView: VideoView
     private lateinit var mediaControls: MediaController
-
+    private lateinit var parser: ezParser
 
 
     private var streamUrl =  "magnet:?xt=urn:btih:88594aaacbde40ef3e2510c47374ec0aa396c08e&dn=bbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&ws=http%3A%2F%2Fdistribution.bbb3d.renderfarming.net%2Fvideo%2Fmp4%2Fbbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4"
@@ -77,6 +77,8 @@ class MainActivity : AppCompatActivity(), TorrentListener {
                 e.printStackTrace()
             }
         }
+        parser= ezParser()
+        parser.parseURL("https://eztv.re/shows/2090/the-handmaids-tale/")
         val torrentOptions = TorrentOptions.Builder()
                 .saveLocation(filesDir)
                 .removeFilesAfterStop(true)
