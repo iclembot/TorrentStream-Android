@@ -50,4 +50,5 @@
         android:max="10"
         android:progress="3" />
 
+
 </LinearLayout>

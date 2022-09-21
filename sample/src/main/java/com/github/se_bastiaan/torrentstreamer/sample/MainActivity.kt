@@ -46,11 +46,11 @@ class MainActivity : AppCompatActivity(), TorrentListener {
     private lateinit var simpleVideoView: VideoView
     private lateinit var mediaControls: MediaController
     private lateinit var parser: ezParser
-
-
-    private var streamUrl =  "magnet:?xt=urn:btih:88594aaacbde40ef3e2510c47374ec0aa396c08e&dn=bbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&ws=http%3A%2F%2Fdistribution.bbb3d.renderfarming.net%2Fvideo%2Fmp4%2Fbbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4"
-    // "magnet:?xt=urn:btih:09A15869D417200F399DCAB89E6E9F494C7416EC&dn=SHADOWS%20HOUSE%20S02E11%20AAC%20MP4-Mobile&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce"
+   // private var streamUrl = "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent"
     // "magnet:?xt=urn:btih:88594aaacbde40ef3e2510c47374ec0aa396c08e&dn=bbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&ws=http%3A%2F%2Fdistribution.bbb3d.renderfarming.net%2Fvideo%2Fmp4%2Fbbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4"
+   // private var streamUrl =  "magnet:?xt=urn:btih:09A15869D417200F399DCAB89E6E9F494C7416EC&dn=SHADOWS%20HOUSE%20S02E11%20AAC%20MP4-Mobile&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce"
+    private var streamUrl = "magnet:?xt=urn:btih:88594aaacbde40ef3e2510c47374ec0aa396c08e&dn=bbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&ws=http%3A%2F%2Fdistribution.bbb3d.renderfarming.net%2Fvideo%2Fmp4%2Fbbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4"
+
     var onClickListener = View.OnClickListener {
         progressBar.progress = 0
         if (torrentStream.isStreaming) {
@@ -114,16 +114,15 @@ class MainActivity : AppCompatActivity(), TorrentListener {
         mediaControls = MediaController(this@MainActivity)
         mediaControls.setAnchorView(simpleVideoView)
         simpleVideoView.setMediaController(mediaControls)
-        val authority = "com.github.se_bastiaan.torrentstreamer.sample.provider"
-        simpleVideoView.setVideoURI(FileProvider.getUriForFile(this@MainActivity, authority, mediaFile))
-        simpleVideoView.start()
+
+      //  simpleVideoView.setVideoURI(FileProvider.getUriForFile(this@MainActivity, authority, mediaFile))
+      //  simpleVideoView.start()
         // Create a sharing intent
 
         startActivity(Intent().apply {
             action = Intent.ACTION_VIEW
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(mediaFile.extension)
-            // moved auth up
-            data = FileProvider.getUriForFile(this@MainActivity, authority, mediaFile)
+            val authority = "com.github.se_bastiaan.torrentstreamer.sample.provider"
+            setDataAndType(FileProvider.getUriForFile(this@MainActivity, authority, mediaFile),MimeTypeMap.getSingleton().getMimeTypeFromExtension(mediaFile.extension))
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
                     Intent.FLAG_ACTIVITY_CLEAR_TOP
         })
