@@ -36,22 +36,51 @@ import com.github.se_bastiaan.torrentstream.TorrentOptions
 import com.github.se_bastiaan.torrentstream.TorrentStream
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener
 import java.io.UnsupportedEncodingException
+import java.net.URI
 import java.net.URLDecoder
 
 @SuppressLint("SetTextI18n")
-class MainActivity : AppCompatActivity(), TorrentListener {
+public class MainActivity : AppCompatActivity(), TorrentListener {
     private lateinit var button: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var torrentStream: TorrentStream
     private lateinit var simpleVideoView: VideoView
     private lateinit var mediaControls: MediaController
     private lateinit var parser: ezParser
-   // private var streamUrl = "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent"
+    private var searchText= ""
+    private var theDomain= "eztv.re"
+    private var queryText= "search/"
+    // private var streamUrl = "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent"
     // "magnet:?xt=urn:btih:88594aaacbde40ef3e2510c47374ec0aa396c08e&dn=bbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&ws=http%3A%2F%2Fdistribution.bbb3d.renderfarming.net%2Fvideo%2Fmp4%2Fbbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4"
    // private var streamUrl =  "magnet:?xt=urn:btih:09A15869D417200F399DCAB89E6E9F494C7416EC&dn=SHADOWS%20HOUSE%20S02E11%20AAC%20MP4-Mobile&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce"
     private var streamUrl = "magnet:?xt=urn:btih:88594aaacbde40ef3e2510c47374ec0aa396c08e&dn=bbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&ws=http%3A%2F%2Fdistribution.bbb3d.renderfarming.net%2Fvideo%2Fmp4%2Fbbb%5Fsunflower%5F1080p%5F30fps%5Fnormal.mp4"
+    private var searchUrl = "https://eztv.re/search/the%20sandman%20s01e02"
 
-    var onClickListener = View.OnClickListener {
+    var onSearchClickListener = View.OnClickListener {
+        if (torrentStream.isStreaming=false) {
+            try {
+                searchText = "the sandman s01e01" // TODO: connect to searchBox ui
+                val uri = URI("https", theDomain, queryText, searchText)
+                searchUrl = uri.toURL().toString()
+            } catch(e: UnsupportedEncodingException) {
+                e.printStackTrace()
+            }
+            parser.parseURL(searchUrl)
+        }
+    }
+
+
+    var onStreamClickListener = View.OnClickListener {
+        if (searchText = "") {
+            try {
+                searchText = "the sandman s01e01" // connect to searchbox ui
+                val uri = URI("https", theDomain, queryText, searchText)
+                streamUrl = uri.toURL().toString()
+            } catch (e: UnsupportedEncodingException) {
+                e.printStackTrace()
+            }
+            parser.parseURL(searchUrl)
+        }
         progressBar.progress = 0
         if (torrentStream.isStreaming) {
             torrentStream.stopStream()
@@ -60,9 +89,8 @@ class MainActivity : AppCompatActivity(), TorrentListener {
         }
         torrentStream.startStream(streamUrl)
         button.text = "Stop stream"
+        searchText = ""
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,15 +106,15 @@ class MainActivity : AppCompatActivity(), TorrentListener {
             }
         }
         parser= ezParser()
-        parser.parseURL("https://eztv.re/shows/2090/the-handmaids-tale/")
         val torrentOptions = TorrentOptions.Builder()
-                .saveLocation(filesDir)
-                .removeFilesAfterStop(true)
-                .build()
+            .saveLocation(filesDir)
+            .removeFilesAfterStop(true)
+            .build()
+
         torrentStream = TorrentStream.init(torrentOptions)
         torrentStream.addListener(this)
         button = findViewById(R.id.button)
-        button.setOnClickListener(onClickListener)
+        button.setOnClickListener(onStreamClickListener)
         progressBar = findViewById(R.id.progress)
         progressBar.max = 100
     }

@@ -41,12 +41,13 @@
             android:text="Search torrents" />
 
         <SearchView
+            android:id="@+id/searchBox"
             android:layout_width="430dp"
             android:layout_height="wrap_content"
             android:foreground="?android:attr/galleryItemBackground"
             android:foregroundTint="#465897"
             android:foregroundTintMode="multiply"
-            android:queryHint="american gods s01e03"
+            android:queryHint="the sandman s01e03"
             android:soundEffectsEnabled="true" />
 
         <Switch
