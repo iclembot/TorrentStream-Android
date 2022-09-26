@@ -57,7 +57,7 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
     private var searchUrl = "https://eztv.re/search/the%20sandman%20s01e02"
 
     var onSearchClickListener = View.OnClickListener {
-        if (torrentStream.isStreaming=false) {
+        if (!torrentStream.isStreaming) {
             try {
                 searchText = "the sandman s01e01" // TODO: connect to searchBox ui
                 val uri = URI("https", theDomain, queryText, searchText)
@@ -71,7 +71,7 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
 
 
     var onStreamClickListener = View.OnClickListener {
-        if (searchText = "") {
+        if (searchText == "") {
             try {
                 searchText = "the sandman s01e01" // connect to searchbox ui
                 val uri = URI("https", theDomain, queryText, searchText)
