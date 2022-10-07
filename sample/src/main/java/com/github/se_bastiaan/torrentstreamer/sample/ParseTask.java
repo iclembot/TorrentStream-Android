@@ -26,7 +26,7 @@ public class ParseTask extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... urls) {
         String firstUrl = "";
         try{
-            String url= "https://eztv.re/shows/451106/house-of-the-dragon/" ;// TODO: new String(urls[0]);
+            String url= new String(urls[0]); // "https://eztv.re/shows/451106/house-of-the-dragon/" ;// TODO: new String(urls[0]);
             Document doc = Jsoup.connect(url).get();
             firstUrl= doc.select("a[href^=magnet]").first().attr("href");
             System.out.println("First URL: " + firstUrl);

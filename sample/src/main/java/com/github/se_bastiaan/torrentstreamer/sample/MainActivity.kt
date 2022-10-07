@@ -47,7 +47,8 @@ interface AsyncResponse {
 
 @SuppressLint("SetTextI18n")
 public class MainActivity : AppCompatActivity(), TorrentListener {
-    lateinit var button: Button
+    lateinit var searchButton: Button
+    lateinit var streamButton: Button
     lateinit var searchBox: SearchView
     private lateinit var progressBar: ProgressBar
     private lateinit var torrentStream: TorrentStream
@@ -66,14 +67,12 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
     var onSearchClickListener = View.OnClickListener {
         if (!torrentStream.isStreaming) {
             try {
-                searchText = "the sandman s01e01" // TODO: connect to searchBox ui
+                searchText = "game of thrones s03e02" // TODO: connect to searchBox ui
                 val uri = URI("https", theDomain, queryText, searchText)
                 searchUrl = uri.toURL().toString()
             } catch(e: UnsupportedEncodingException) {
                 e.printStackTrace()
             }
-
-
             parser.parseURL(searchUrl)
         }
     }
@@ -93,11 +92,11 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
         progressBar.progress = 0
         if (torrentStream.isStreaming) {
             torrentStream.stopStream()
-            button.text = "Start stream"
+            streamButton.text = "Start stream"
             return@OnClickListener
         }
         torrentStream.startStream(streamUrl)
-        button.text = "Stop stream"
+        streamButton.text = "Stop stream"
         searchText = ""
     }
 
@@ -122,8 +121,10 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
 
         torrentStream = TorrentStream.init(torrentOptions)
         torrentStream.addListener(this)
-        button = findViewById(R.id.button)
-        button.setOnClickListener(onStreamClickListener)
+        searchButton = findViewById(R.id.button2)
+        searchButton.setOnClickListener(onSearchClickListener)
+        streamButton = findViewById(R.id.button)
+        streamButton.setOnClickListener(onStreamClickListener)
         progressBar = findViewById(R.id.progress)
         progressBar.max = 100
         searchBox = findViewById(R.id.searchBox)
@@ -141,7 +142,7 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
 
     override fun onStreamError(torrent: Torrent, e: Exception) {
         Log.e(TORRENT, "onStreamError", e)
-        button.text = "Start stream"
+        streamButton.text = "Start stream"
     }
 
     override fun onStreamReady(torrent: Torrent) {
@@ -152,18 +153,18 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
         mediaControls = MediaController(this@MainActivity)
         mediaControls.setAnchorView(simpleVideoView)
         simpleVideoView.setMediaController(mediaControls)
-
-      //  simpleVideoView.setVideoURI(FileProvider.getUriForFile(this@MainActivity, authority, mediaFile))
-      //  simpleVideoView.start()
+        val authority = "com.github.se_bastiaan.torrentstreamer.sample.provider"
+        simpleVideoView.setVideoURI(FileProvider.getUriForFile(this@MainActivity, authority, mediaFile))
+        simpleVideoView.start()
         // Create a sharing intent
-
+/*
         startActivity(Intent().apply {
             action = Intent.ACTION_VIEW
             val authority = "com.github.se_bastiaan.torrentstreamer.sample.provider"
             setDataAndType(FileProvider.getUriForFile(this@MainActivity, authority, mediaFile),MimeTypeMap.getSingleton().getMimeTypeFromExtension(mediaFile.extension))
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
                     Intent.FLAG_ACTIVITY_CLEAR_TOP
-        })
+        })*/
 
     }
 
