@@ -1,0 +1,81 @@
+I felt the below approach is very easy.
+
+I have declared an interface for callback
+
+public interface AsyncResponse {
+    void processFinish(Object output);
+}
+
+Then created asynchronous Task for responding all type of parallel requests
+
+ public class MyAsyncTask extends AsyncTask<Object, Object, Object> {
+
+    public AsyncResponse delegate = null; // Call back interface
+
+    public MyAsyncTask(AsyncResponse asyncResponse) {
+        delegate = asyncResponse; // Assigning call back interface through constructor
+    }
+
+    @Override
+    protected Object doInBackground(Object... params) {
+
+    //My Background tasks are written here
+
+      return {resutl Object}
+
+    }
+
+    @Override
+    protected void onPostExecute(Object result) {
+        delegate.processFinish(result);
+    }
+
+}
+
+Then Called the asynchronous task when clicking a button in activity Class.
+
+public class MainActivity extends Activity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+        Button mbtnPress = (Button) findViewById(R.id.btnPress);
+
+        mbtnPress.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                MyAsyncTask asyncTask =new MyAsyncTask(new AsyncResponse() {
+
+                    @Override
+                    public void processFinish(Object output) {
+                        Log.d("Response From Asynchronous task:", (String) output);
+                        mbtnPress.setText((String) output);
+                    }
+                });
+                asyncTask.execute(new Object[] { "Youe request to aynchronous task class is giving here.." });
+
+            }
+        });
+    }
+}
+
+Thanks
+
+    Again a memory leak situation –
+    user1530779
+    Jul 7, 2015 at 8:07
+    I was looking for the exact solution and found this thread, but I don't understand the reason behind doing all the above. In this case, the asynctask is executed in the MainActivity where access to the UI is not a problem. The same could have been accomplished by updating the UI in the onPostExecute() method of asynctask, without using a special interface for this. The problem that would be nice to solve is firing the async task from another non-activity class and update the UI from there. –
+    user_noname_00
+    Jul 17, 2015 at 5:09
+
+same as you.. this is the best answer for bgginers like me] –
+Aesthetic
+Nov 13, 2016 at 11:37
+@user1530779 why is this a memory leak situation? –
+user3764893
+Jan 22, 2018 at 22:13
+@user3764893 If an Activity implements the Interface and is destroyed (i.e. due to and orientation change) before the AsyncTask is done, the AsyncTask holds a strong reference to the activity. Which causes the garbage collector to not collect the activity object. My suggested solution to this is pretty simple: set the delegate reference to null in the onDestroy() method of the activity. –
+Chris
+Feb 25, 2018 at 13:34

@@ -1,24 +1,35 @@
 
 package com.github.se_bastiaan.torrentstreamer.sample;
 
-import java.io.IOException;
-import android.os.AsyncTask;
-import java.net.URL;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import android.widget.ProgressBar;
+import android.app.Activity;
 
+import java.net.URL;
+
+import android.widget.SearchView;
+
+import android.content.Context;
+
+import androidx.annotation.Nullable;
 
 
 public class ezParser {
     public URL url;
-
-    public ezParser(){
+    public Activity theContext;
+    public ezParser(Context context) {
+        theContext = (Activity) context;
     }
 
     public void parseURL(String urlstr) {
-        new ParseTask().execute(urlstr);
+
+        ParseTask theTask=new ParseTask(new AsyncResponse() {
+            SearchView theView = null;
+            @Override public void processFinish(@Nullable Object output) {
+                System.out.println("Callback received:" + urlstr);
+                theView = (SearchView) ( theContext).findViewById(R.id.searchBox); //
+                theView.setQuery(urlstr,false);
+            }
+        });
+        theTask.execute(urlstr);
     }
 }
 

@@ -7,6 +7,14 @@ import java.io.IOException;
 
 public class ParseTask extends AsyncTask<String, Void, String> {
 
+
+    public AsyncResponse delegate = null; // Call back interface
+
+
+    public ParseTask(AsyncResponse asyncResponse) {
+        delegate = asyncResponse; // Assigning call back interface through constructor
+    }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -33,5 +41,6 @@ public class ParseTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String magLink) {
         // (ProgressBar).findViewById(R.id.progress).setIndeterminate(false);
         System.out.println("PostExec: " + magLink);
+        delegate.processFinish(magLink);
     }
 }

@@ -38,16 +38,22 @@ import com.github.se_bastiaan.torrentstream.listeners.TorrentListener
 import java.io.UnsupportedEncodingException
 import java.net.URI
 import java.net.URLDecoder
+import android.content.Context
+
+interface AsyncResponse {
+    fun processFinish(output: Any?)
+}
 
 @SuppressLint("SetTextI18n")
 public class MainActivity : AppCompatActivity(), TorrentListener {
-    private lateinit var button: Button
+    lateinit var button: Button
+    lateinit var searchBox: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var torrentStream: TorrentStream
     private lateinit var simpleVideoView: VideoView
     private lateinit var mediaControls: MediaController
     private lateinit var parser: ezParser
-    private var searchText= ""
+    var searchText= ""
     private var theDomain= "eztv.re"
     private var queryText= "search/"
     // private var streamUrl = "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent"
@@ -65,6 +71,8 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
             } catch(e: UnsupportedEncodingException) {
                 e.printStackTrace()
             }
+
+
             parser.parseURL(searchUrl)
         }
     }
@@ -73,7 +81,7 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
     var onStreamClickListener = View.OnClickListener {
         if (searchText == "") {
             try {
-                searchText = "the sandman s01e01" // connect to searchbox ui
+                searchText = searchBox.text.toString() // "the sandman s01e01" // connect to searchbox ui
                 val uri = URI("https", theDomain, queryText, searchText)
                 streamUrl = uri.toURL().toString()
             } catch (e: UnsupportedEncodingException) {
@@ -105,7 +113,7 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
                 e.printStackTrace()
             }
         }
-        parser= ezParser()
+        parser= ezParser(this)
         val torrentOptions = TorrentOptions.Builder()
             .saveLocation(filesDir)
             .removeFilesAfterStop(true)
@@ -117,6 +125,7 @@ public class MainActivity : AppCompatActivity(), TorrentListener {
         button.setOnClickListener(onStreamClickListener)
         progressBar = findViewById(R.id.progress)
         progressBar.max = 100
+        searchBox = findViewById(R.id.searchBox)
     }
 
     override fun onStreamPrepared(torrent: Torrent) {
