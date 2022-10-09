@@ -29,10 +29,10 @@ public class ParseTask extends AsyncTask<String, Void, String> {
             String url= new String(urls[0]); // "https://eztv.re/shows/451106/house-of-the-dragon/" ;// TODO: new String(urls[0]);
             Document doc = Jsoup.connect(url).get();
             firstUrl= doc.select("a[href^=magnet]").first().attr("href");
-            System.out.println("First URL: " + firstUrl);
+            System.out.println("[jcerr: doInBackground]" + " First URL: " + firstUrl);
                     //getElementsContainingText("magnet").get(0).html()+ url.toString() ); //TODO: needs to be finessed: The jSOUP query selector area
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("jcerr: doInBackground]" + e.getMessage());
         }
         return firstUrl;
     }
@@ -40,7 +40,7 @@ public class ParseTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String magLink) {
         // (ProgressBar).findViewById(R.id.progress).setIndeterminate(false);
-        System.out.println("PostExec: " + magLink);
+        System.out.println("jcerr: onPostExecute]\" +PostExec: " + magLink);
         delegate.processFinish(magLink);
     }
 }

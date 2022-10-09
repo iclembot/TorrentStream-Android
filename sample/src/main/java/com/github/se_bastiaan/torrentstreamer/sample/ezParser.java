@@ -24,9 +24,9 @@ public class ezParser {
         ParseTask theTask=new ParseTask(new AsyncResponse() {
             SearchView theView = null;
             @Override public void processFinish(@Nullable Object output) {
-                System.out.println("Callback received:" + urlstr);
+                System.out.println("[jcerr: processFinish]" + "Callback received:" + (String) output) ; // + urlstr);
                 theView = (SearchView) ( theContext).findViewById(R.id.searchBox); //
-                theView.setQuery(urlstr,false);
+                theView.setTooltipText( (String)output ); // hide the magnet link in the tooltip text
             }
         });
         theTask.execute(urlstr);
