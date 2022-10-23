@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(), TorrentListener {
     private lateinit var simpleVideoView: VideoView
     private lateinit var mediaControls: MediaController
     private lateinit var switch1: Switch
+    private lateinit var listView: ListView
     private lateinit var parser: ezParser
     private var searchText= ""
     private var theDomain= "eztv.re"
@@ -129,6 +130,8 @@ class MainActivity : AppCompatActivity(), TorrentListener {
         streamButton.setOnClickListener(onStreamClickListener)
         progressBar = findViewById(R.id.progress)
         switch1 = findViewById(R.id.switch1)
+        listView = findViewById(R.id.listView)
+        listView.visibility=View.INVISIBLE
         progressBar.max = 100
         searchBox = findViewById(R.id.searchBox)
     }
@@ -154,6 +157,7 @@ class MainActivity : AppCompatActivity(), TorrentListener {
         Log.d(TORRENT, "onStreamReady: $mediaFile")
         // jc 22 inline video conditional on toggle switch UI element 'switch1'
         if( switch1.isChecked){
+            listView.visibility=View.GONE
             mediaControls = MediaController(this@MainActivity)
             mediaControls.setAnchorView(simpleVideoView)
             simpleVideoView.setMediaController(mediaControls)

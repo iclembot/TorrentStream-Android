@@ -66,14 +66,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:checked="true"
+            android:checked="false"
             android:minHeight="48dp"
             android:showText="true"
             android:switchTextAppearance="@style/TextAppearance.AppCompat.Body1"
             android:text="Preview"
             android:textAlignment="gravity"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:checked="true" />
+            tools:checked="false" />
 
     </LinearLayout>
 
@@ -84,6 +84,13 @@
         android:layout_height="wrap_content"
         android:indeterminate="false"
         android:max="100" />
+
+    <ListView
+        android:id="@+id/listView"
+        style="@style/Widget.AppCompat.ListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
 
     <VideoView
         android:id="@+id/videoView"
