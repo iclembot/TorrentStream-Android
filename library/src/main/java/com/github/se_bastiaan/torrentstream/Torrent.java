@@ -46,7 +46,7 @@ public class Torrent implements AlertListener {
     private final static Integer DEFAULT_PREPARE_COUNT = 5;
     private final static Integer SEQUENTIAL_CONCURRENT_PIECES_COUNT = 5;
     private final int deadLine = 3000;
-    private final int bufferPieces = 17;
+    private final int bufferPieces = 30;
     public enum State {UNKNOWN, RETRIEVING_META, STARTING, STREAMING}
 
     private Integer piecesToPrepare;

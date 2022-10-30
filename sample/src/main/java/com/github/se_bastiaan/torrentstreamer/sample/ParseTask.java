@@ -5,11 +5,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import java.io.IOException;
 
-public class ParseTask extends AsyncTask<String, Void, String> {
+public class ParseTask extends AsyncTask<String, Void, Object> {
 
 
     public AsyncResponse delegate = null; // Call back interface
-
+    public Document doc = null;
 
     public ParseTask(AsyncResponse asyncResponse) {
         delegate = asyncResponse; // Assigning call back interface through constructor
@@ -23,24 +23,25 @@ public class ParseTask extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected String doInBackground(String... urls) {
+    protected Object doInBackground(String... urls) {
         String firstUrl = "";
         try{
             String url= new String(urls[0]); // "https://eztv.re/shows/451106/house-of-the-dragon/" ;// TODO: new String(urls[0]);
-            Document doc = Jsoup.connect(url).get();
+            doc = Jsoup.connect(url).get();
             firstUrl= doc.select("a[href^=magnet]").first().attr("href");
             System.out.println("[jcerr: doInBackground]" + " First URL: " + firstUrl);
                     //getElementsContainingText("magnet").get(0).html()+ url.toString() ); //TODO: needs to be finessed: The jSOUP query selector area
-        } catch (IOException e) {
+        } catch (IOException  e) {
             System.out.println("jcerr: doInBackground]" + e.getMessage());
         }
-        return firstUrl;
+        return doc;
     }
 
     @Override
-    protected void onPostExecute(String magLink) {
+    protected void onPostExecute(Object docRef) {
+      //  super.onPostExecute();
         // (ProgressBar).findViewById(R.id.progress).setIndeterminate(false);
-        System.out.println("jcerr: onPostExecute]\" +PostExec: " + magLink);
-        delegate.processFinish(magLink);
+        System.out.println("jcerr: onPostExecute] PostExec");
+        delegate.processFinish(docRef);
     }
 }
