@@ -27,7 +27,6 @@ public class ezParser {
 
         ParseTask theTask=new ParseTask(new AsyncResponse() {
             SearchView theView = null;
-            ListView listTemp = null;
             String firstUrl="";
 
 
@@ -43,7 +42,7 @@ public class ezParser {
                 System.out.println("[jcerr: processFinish]" + "Callback received:" + firstUrl) ; // + urlstr);
                 theView = (SearchView) (theContext).findViewById(R.id.searchBox); //
                 theView.setTooltipText( firstUrl ); // hide the magnet link in the tooltip text
-                listTemp = (ListView) (theContext).findViewById(R.id.listView); //
+                ListView listTemp = (ListView) (theContext).findViewById(R.id.listView); //
                 listTemp.setVisibility(View.VISIBLE);
                 String[] resultList =null;
                 System.out.println("[jcerr: Number of elements:" + firstUrl);
@@ -55,8 +54,7 @@ public class ezParser {
                             Element element = elements.get(i);
                         if (element != null) {
                             resultList[i] = "#" + i + element.attr("title");
-                            listTemp.
-                            System.out.println("[jcerr: inner html: " + element.wholeOwnText() ); //;
+                            System.out.println("[jcerr: inner html: " + element.attr("href") ); //;
                         }
                     }
                 }
