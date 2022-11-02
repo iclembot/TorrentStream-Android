@@ -60,7 +60,7 @@ public class Torrent implements AlertListener {
     private List<Integer> preparePieces;
     private Boolean[] hasPieces;
 
-    private List<WeakReference<TorrentInputStream>> torrentStreamReferences;
+    private final List<WeakReference<TorrentInputStream>> torrentStreamReferences;
 
     private State state = State.RETRIEVING_META;
 

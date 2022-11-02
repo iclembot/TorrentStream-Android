@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 class TorrentInputStream extends FilterInputStream implements AlertListener {
-    private Torrent torrent;
+    private final Torrent torrent;
     private boolean stopped;
     private long location;
 
