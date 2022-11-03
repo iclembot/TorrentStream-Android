@@ -61,7 +61,7 @@ public class ezParser {
                             System.out.println("[jcerr: loop index:" + i);
                             Element element = elements.get(i);
                         if (element != null) {
-                            Episode tempEp = new Episode( "#" + i + element.attr("title"), element.attr("href") );
+                            Episode tempEp = new Episode( "# " + i + element.attr("title"), element.attr("href") );
                             tempAdapter.add(tempEp);
                         }
                     }
