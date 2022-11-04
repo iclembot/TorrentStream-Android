@@ -21,7 +21,7 @@ Then created asynchronous Task for responding all type of parallel requests
 
     //My Background tasks are written here
 
-      return {resutl Object}
+      return {result Object}
 
     }
 

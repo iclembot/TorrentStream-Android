@@ -38,7 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Search torrents"
-            android:textColor="#00BCD4" />
+            android:textColor="#00BCD4"
+            android:visibility="gone" />
 
         <SearchView
             android:id="@+id/searchBox"

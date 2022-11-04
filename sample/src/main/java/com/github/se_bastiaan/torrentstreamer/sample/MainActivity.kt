@@ -76,10 +76,38 @@ class MainActivity : AppCompatActivity(), TorrentListener {
     }
 
 
+    private var onSearchListener = object : SearchView.OnQueryTextListener {
+
+        override fun onQueryTextChange(newText: String): Boolean {
+            return false
+        }
+
+        override fun onQueryTextSubmit(query: String): Boolean {
+            // task HERE
+
+
+            if (!torrentStream.isStreaming) {
+                try {
+                    searchText = searchBox.query.toString() //
+                    val uri = URI("https", theDomain, queryText, searchText)
+                    searchUrl = uri.toURL().toString().replace("#", "") //replaceAll("#" , "")
+                    Log.d(
+                        TORRENT,
+                        "[jcerr][searchText]- " + searchText + " -[searchUrl]- " + searchUrl
+                    )
+                } catch (e: UnsupportedEncodingException) {
+                    e.printStackTrace()
+                }
+                parser.parseURL(searchUrl)
+            }
+            return false
+        }
+    }
+
     private var onStreamClickListener = View.OnClickListener {
         if (searchText == "") {
             try {
-                searchText = "the sandman s01e01" // connect to searchbox ui searchBox.query.toString() //
+                searchText = "the sandman s01e01"
                 val uri = URI("https", theDomain, queryText, searchText)
                 streamUrl = uri.toURL().toString()
             } catch (e: UnsupportedEncodingException) {
@@ -134,6 +162,7 @@ class MainActivity : AppCompatActivity(), TorrentListener {
         listView.visibility=View.INVISIBLE
         progressBar.max = 100
         searchBox = findViewById(R.id.searchBox)
+        searchBox.setOnQueryTextListener( onSearchListener)
     }
 
     override fun onStreamPrepared(torrent: Torrent) {

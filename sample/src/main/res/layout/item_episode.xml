@@ -19,5 +19,5 @@
         android:paddingLeft="32px"
         android:text="Link"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:visibility="visible" />
+        android:visibility="gone" />
 </LinearLayout>
