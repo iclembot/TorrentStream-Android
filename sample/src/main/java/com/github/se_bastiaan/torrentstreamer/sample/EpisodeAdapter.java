@@ -34,6 +34,7 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
                                                Episode tempEpisode = getItem(position);
                                                // Do what you want here...
                                                parent.getRootView().findViewById(R.id.searchBox).setTooltipText(tempEpisode.link);
+                                               parent.getRootView().findViewById(R.id.searchBox).setTag(tempEpisode.thumb);
                                                System.out.println("[jcerr: episode.link= "+ tempEpisode.link);
                                            }
                                        });
